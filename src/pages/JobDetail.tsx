@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAppState } from "../context/AppContext";
-import { Job, Company, Recruiter } from "../types";
 import FreshnessIndicator from "../components/FreshnessIndicator";
 import RecruiterCredibilityCard from "../components/RecruiterCredibilityCard";
 import ReportModal from "../components/ReportModal";
@@ -13,11 +12,11 @@ const JobDetail: React.FC = () => {
   const navigate = useNavigate();
   const [reportOpen, setReportOpen] = useState(false);
 
-  const job = state.jobs.find((j) => j.id === jobId) as Job;
-  const company = state.companies.find((c) => c.id === job?.companyId) as Company;
-  const recruiter = state.recruiters.find((r) => r.id === job?.companyId) as Recruiter; // simplified mapping
-
+  const job = state.jobs.find((j) => j.id === jobId);
   if (!job) return <div className="p-4">Job not found.</div>;
+
+  const company = state.companies.find((c) => c.id === job.companyId) || state.companies[0];
+  const recruiter = state.recruiters.find((r) => r.companyId === job.companyId) || state.recruiters[0];
 
   const handleApply = () => {
     dispatch({ type: "APPLY_JOB", payload: { jobId: job.id } });

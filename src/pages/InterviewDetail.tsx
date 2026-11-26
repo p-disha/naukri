@@ -2,7 +2,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useAppState } from "../context/AppContext";
-import { Interview, Job, Company, Recruiter } from "../types";
+import { Interview } from "../types";
 import InterviewDetailsCard from "../components/InterviewDetailsCard";
 import AttendanceConfirmation from "../components/AttendanceConfirmation";
 import ReconciliationStatus from "../components/ReconciliationStatus";
@@ -14,11 +14,10 @@ const InterviewDetail: React.FC = () => {
   const interview = state.interviews.find((i) => i.id === interviewId) as Interview;
   if (!interview) return <div className="p-4">Interview not found.</div>;
 
-  // Find associated application and job
   const application = state.applications.find((a) => a.id === interview.applicationId);
-  const job = application ? (state.jobs.find((j) => j.id === application.jobId) as Job) : undefined;
-  const company = job ? (state.companies.find((c) => c.id === job.companyId) as Company) : undefined;
-  const recruiter = company ? (state.recruiters.find((r) => r.id === company.id) as Recruiter) : undefined;
+  const job = application ? (state.jobs.find((j) => j.id === application.jobId) || state.jobs[0]) : state.jobs[0];
+  const company = job ? (state.companies.find((c) => c.id === job.companyId) || state.companies[0]) : state.companies[0];
+  const recruiter = state.recruiters.find((r) => r.companyId === company?.id) || state.recruiters[0];
 
   const isSeeker = state.user.role === "seeker";
 

@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useAppState } from "../context/AppContext";
 import ApplicationCard from "../components/ApplicationCard";
-import { Job, Company } from "../types";
 
 const statusFilters = [
   { label: "All", value: "all" },
@@ -67,8 +66,9 @@ const MyApplications: React.FC = () => {
 
       <div className="grid gap-4">
         {applications.map((app) => {
-          const job = state.jobs.find((j) => j.id === app.jobId) as Job;
-          const company = state.companies.find((c) => c.id === job.companyId) as Company;
+          const job = state.jobs.find((j) => j.id === app.jobId);
+          if (!job) return null;
+          const company = state.companies.find((c) => c.id === job.companyId) || state.companies[0];
           return <ApplicationCard key={app.id} app={app} job={job} company={company} />;
         })}
       </div>

@@ -2,7 +2,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useAppState } from "../context/AppContext";
-import { Application, Job, Company } from "../types";
+import { Application } from "../types";
 
 const ApplicationDetail: React.FC = () => {
   const { appId } = useParams<{ appId: string }>();
@@ -11,8 +11,8 @@ const ApplicationDetail: React.FC = () => {
   const app = state.applications.find((a) => a.id === appId) as Application;
   if (!app) return <div className="p-4">Application not found.</div>;
 
-  const job = state.jobs.find((j) => j.id === app.jobId) as Job;
-  const company = state.companies.find((c) => c.id === job.companyId) as Company;
+  const job = state.jobs.find((j) => j.id === app.jobId) || state.jobs[0];
+  const company = state.companies.find((c) => c.id === job.companyId) || state.companies[0];
 
   return (
     <div className="p-4 max-w-3xl mx-auto">

@@ -2,7 +2,6 @@
 import React from "react";
 import { useAppState } from "../context/AppContext";
 import RecruiterCandidateCard from "../components/RecruiterCandidateCard";
-import { Job, Company, Recruiter } from "../types";
 
 const RecruiterDashboard: React.FC = () => {
   const { state } = useAppState();
@@ -19,9 +18,10 @@ const RecruiterDashboard: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4">Recruiter Dashboard</h2>
       <div className="space-y-4">
         {state.applications.map((app) => {
-          const job = state.jobs.find((j) => j.id === app.jobId) as Job;
-          const company = state.companies.find((c) => c.id === job.companyId) as Company;
-          const recruiter = state.recruiters.find((r) => r.id === job.companyId) as Recruiter; // simplified
+          const job = state.jobs.find((j) => j.id === app.jobId);
+          if (!job) return null;
+          const company = state.companies.find((c) => c.id === job.companyId) || state.companies[0];
+          const recruiter = state.recruiters.find((r) => r.companyId === job.companyId) || state.recruiters[0];
           return (
             <RecruiterCandidateCard
               key={app.id}

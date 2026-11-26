@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import JobSearchBar from "../components/JobSearchBar";
 import JobCard from "../components/JobCard";
 import { useAppState } from "../context/AppContext";
-import { Job, Company, Recruiter } from "../types";
+import { Job } from "../types";
 
 const SearchJobs: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -55,8 +55,8 @@ const SearchJobs: React.FC = () => {
       <JobSearchBar />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-4">
         {filteredJobs.map((job) => {
-          const company = state.companies.find((c) => c.id === job.companyId) as Company;
-          const recruiter = state.recruiters.find((r) => r.id === job.companyId) as Recruiter; // simplification
+          const company = state.companies.find((c) => c.id === job.companyId) || state.companies[0];
+          const recruiter = state.recruiters.find((r) => r.companyId === job.companyId) || state.recruiters[0];
           return (
             <JobCard
               key={job.id}

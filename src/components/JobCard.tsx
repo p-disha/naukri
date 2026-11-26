@@ -32,7 +32,9 @@ const JobCard: React.FC<Props> = ({ job, company, recruiter, onSave, onApply }) 
           <Heart size={20} />
         </button>
       </div>
-      <p className="text-sm text-gray-600">{company.name} • {recruiter.name} • {job.location}</p>
+      <p className="text-sm text-gray-600">
+        {(company?.name) || "Verified Employer"} • {(recruiter?.name) || "Hiring Team"} • {job.location}
+      </p>
       <p className="text-sm text-gray-500 mt-1">Experience: {job.experience}</p>
       {job.salary && <p className="text-sm text-gray-500">Salary: {job.salary}</p>}
       <p className="text-sm text-gray-400 mt-2 line-clamp-2">{job.description}</p>
